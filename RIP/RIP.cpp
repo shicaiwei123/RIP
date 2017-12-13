@@ -41,7 +41,7 @@ DWORD WINAPI RIPSendThread(LPVOID lpParameter)
 	while (1)
 	{
 		socketSend.sendSocket(sendData, 1024, connectIP, port);
-		Sleep(2000);
+		Sleep(15000);
 	}
 	closesocket(sClient);
 	WSACleanup();
@@ -86,6 +86,7 @@ int main(int argc, char* argv[])
 	   //{
 		  // socketClinet.recvSocket(recvData, 4096, connectIP, port);
 		  // socketClinet.sendSocket(sendData, 1024, connectIP, port);
+
 
 		  // //socketClinet.sendSocket(sendData, 1024);
 		  // //socketClinet.recvSocket(recvData, 4096);

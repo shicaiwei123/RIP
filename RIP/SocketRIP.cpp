@@ -105,17 +105,18 @@ void SocketClient::sendSocket(char *SendData, int Length)
 	if (stopWait)
 	{
 		send(s, SendData, Length, 0);
-		clock.run();
+		//clock.run();
 		while (!isACK)
 		{
-			endFlag = clock.getEndFlag();
-			if (endFlag)
-			{
-				send(s, SendData, Length, 0);
-				clock.set(0, 0, 2);
-				clock.run();
-			}
-
+			//endFlag = clock.getEndFlag();
+			//if (endFlag)
+			//{
+			//	send(s, SendData, Length, 0);
+			//	clock.set(0, 0, 2);
+			//	clock.run();
+			//}
+			send(s, SendData, Length, 0);
+			Sleep(2000);
 		}
 
 	}
@@ -144,18 +145,12 @@ void SocketClient::sendSocket(char* SendData, int Length, const char *ToIp, int 
 	if (stopWait)
 	{
 		sendto(s, SendData, Length, 0, (sockaddr *)&serAddr, len);
-		clock.begin(0, 0, 2);
-		clock.run();
+		//clock.begin(0, 0, 2);
+		//clock.run();
 		while (!isACK)
 		{
-			endFlag = clock.getEndFlag();
-			if (endFlag)
-			{
 				sendto(s, SendData, Length, 0, (sockaddr *)&serAddr, len);
-				clock.set(0, 0, 2);
-				clock.run();
-			}
-
+				Sleep(2000);			
 		}
 		//return 0;
 
