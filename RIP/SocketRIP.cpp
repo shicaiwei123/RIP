@@ -91,12 +91,30 @@ int SocketClient::recvSocket(char *RecvData, int Length, const char *FromIp, int
 				}
 
 			}
-			return 0;
+
 		}
+		return 0;
 	}
 	return 0;
 
 }
+
+int SocketClient::recvMessage(RIPMessage *ripMessage)
+{
+	char recvData[4096];
+	recvSocket(recvData, 4096);
+	memcpy(ripMessage, recvData, sizeof(RIPMessage));
+	return 0;
+}
+
+int SocketClient::recvMessage(RIPMessage *ripMessage, const char *FromIp, int Port)
+{
+	char recvData[4096];
+	recvSocket(recvData, 4096, FromIp, Port);
+	memcpy(ripMessage, recvData, sizeof(RIPMessage));
+	return 0;
+}
+
 
 void SocketClient::sendSocket(char *SendData, int Length)
 {
@@ -108,6 +126,7 @@ void SocketClient::sendSocket(char *SendData, int Length)
 		//clock.run();
 		while (!isACK)
 		{
+			isACK = false;
 			//endFlag = clock.getEndFlag();
 			//if (endFlag)
 			//{
@@ -117,6 +136,7 @@ void SocketClient::sendSocket(char *SendData, int Length)
 			//}
 			send(s, SendData, Length, 0);
 			Sleep(2000);
+
 		}
 
 	}
@@ -144,13 +164,22 @@ void SocketClient::sendSocket(char* SendData, int Length, const char *ToIp, int 
 	bool endFlag = false;
 	if (stopWait)
 	{
+		isACK = false;
 		sendto(s, SendData, Length, 0, (sockaddr *)&serAddr, len);
 		//clock.begin(0, 0, 2);
 		//clock.run();
 		while (!isACK)
 		{
-				sendto(s, SendData, Length, 0, (sockaddr *)&serAddr, len);
-				Sleep(2000);			
+			//endFlag = clock.getEndFlag();
+			//if (endFlag)
+			//{
+			//	sendto(s, SendData, Length, 0, (sockaddr *)&serAddr, len);
+			//	clock.set(0, 0, 2);
+			//	clock.run();
+			//}
+			sendto(s, SendData, Length, 0, (sockaddr *)&serAddr, len);
+			Sleep(2000);
+
 		}
 		//return 0;
 
@@ -165,6 +194,20 @@ void SocketClient::sendSocket(char* SendData, int Length, const char *ToIp, int 
 		}
 	}
 
+}
+
+void SocketClient::sendMessage(RIPMessage *ripMessage)
+{
+	char sendData[1024];
+	memcpy(sendData, ripMessage, sizeof(RIPMessage));
+	sendSocket( sendData, 1024);
+}
+
+void SocketClient::sendMessage(RIPMessage *ripMessage, const char *ToIp, int Port)
+{
+	char sendData[1024];
+	memcpy(sendData, ripMessage, sizeof(RIPMessage));
+	sendSocket(sendData, 1024, ToIp, Port);
 }
 
 void SocketClient::setSocket(SOCKET S)

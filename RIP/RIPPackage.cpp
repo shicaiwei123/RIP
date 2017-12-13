@@ -1,133 +1,40 @@
 #include "RIPPackage.h"
 
-DHCPPackageClient::DHCPPackageClient(DHCPMessageStuct *Meassage):DHCPPackageBasic(Meassage)
+RIPPacket::RIPPacket()
 {
-	meassageType = DHCP_DISCOVER;
-	memset(&recvMessage, 0, sizeof(recvMessage));
-	DHCPFinish = false;
-}
-
-int DHCPPackageClient::package(DHCPMessageStuct *Meassage, int MeassageType)
-{
-	uint8_t mac[] = "52-3B-8C-5C-72-32";//静态设置主机MAC地址用于调试。
-	DHCPMessageStuct *packet = Meassage;
-	switch (MeassageType)
-	{
-	case DHCP_DISCOVER:
-		memset(packet, 0, sizeof(DHCPMessageStuct));
-		packet->hdr.xid = 0xaaaaaaaa;
-		packet->hdr.htype = ETHERNET;
-		packet->hdr.hlen = ETHERNET_LEN;
-		packet->hdr.hops = 0;
-		packet->hdr.ciaddr.address = 0;
-		packet->hdr.yiaddr.address = 0;
-		packet->hdr.flags = 0x0080;
-		packet->hdr.secs = 0x0000;
-		packet->hdr.siaddr.address = 0x00000000;
-		packet->hdr.giaddr.address = 0;
-		memcpy(packet->hdr.chaddr, mac, 18);
-		//MACAGet((char*)packet->hdr.chaddr);//获取本机MAC地址
-		memset(packet->hdr.sname, 0, sizeof(packet->hdr.sname));
-		memset(packet->hdr.file, 0, sizeof(packet->hdr.file));
-		packet->hdr.dhcp_magic = 0x63538263;
-		packet->hdr.op = BOOTREQUEST;
-		addOption53(packet, MeassageType);
-		break;
-
-	case DHCP_REQUEST:
-		memset(packet, 0, sizeof(DHCPMessageStuct));
-		packet->hdr.op = BOOTREQUEST;
-		packet->hdr.htype = ETHERNET;
-		packet->hdr.hlen = ETHERNET_LEN;
-		packet->hdr.hops = 0;
-		packet->hdr.xid = 0x1111111a;
-		packet->hdr.ciaddr.address=0;
-		packet->hdr.yiaddr.address=0;
-		packet->hdr.flags = 0x0080;
-		packet->hdr.secs = 0x0000;
-		packet->hdr.siaddr.address = 0x00000000;
-		packet->hdr.giaddr.address = 0;
-		memcpy(packet->hdr.chaddr, mac, 18);
-		//MACAGet((char*)packet->hdr.chaddr);
-		memset(packet->hdr.sname, 0, sizeof(packet->hdr.sname));
-		memset(packet->hdr.file, 0, sizeof(packet->hdr.file));
-		packet->hdr.dhcp_magic = 0x63538263;
-		addOption53(packet, MeassageType);
-		break;
-
-	default:
-		break;
-	};
-	return 0;
-}
-
-int DHCPPackageClient::addOption53(DHCPMessageStuct *Meassage, int MeassageType)
-{
-	DHCPMessageStuct *packet = Meassage;
-	packet->option.DHCPMeassageType = MeassageType;
-	return 0;
 
 }
 
-void DHCPPackageClient::package()
+void RIPPacket::begin()
 {
-
-	package(meassage, meassageType);
+	memset(&header, 0, sizeof(header));
+	memset(&messageData, 0, sizeof(messageData));
+	memset(&ripMessage, 0, sizeof(ripMessage));
 }
 
-void DHCPPackageClient::addOption53()
+void RIPPacket::setHeader(uint8_t Command, uint8_t Version)
 {
-	addOption53(meassage, meassageType);
+	header.command = Command;
+	header.version = Version;
 }
 
-int DHCPPackageClient::analysis(DHCPMessageStuct *Meassage)
+void RIPPacket::setData(MessageData *Data)
 {
-	recvMessage = *Meassage;
-	cout << "报文类型是：";
-	if (Meassage->option.DHCPMeassageType == 2)
-		printf("OFFER\n");
-	else if (Meassage->option.DHCPMeassageType == 4)
-		printf("ACK\n");
-	cout << "可用IP地址是："
-		<< (int)Meassage->hdr.yiaddr.seg[3]  << "."
-		<< (int)Meassage->hdr.yiaddr.seg[2]<< "."
-		<< (int)Meassage->hdr.yiaddr.seg[1] << "."
-		<< (int)Meassage->hdr.yiaddr.seg[0] << "."
-		<< endl;
-	cout << "掩码是："
-		<< (int)Meassage->option.subnetMask.seg[3] << "."
-		<< (int)Meassage->option.subnetMask.seg[2] << "."
-		<< (int)Meassage->option.subnetMask.seg[1] << "."
-		<< (int)Meassage->option.subnetMask.seg[0] << "."
-		<< endl;
-	cout << "网关是："
-		<< (int)Meassage->option.routerAddress.seg[3] << "."
-		<< (int)Meassage->option.routerAddress.seg[2] << "."
-		<< (int)Meassage->option.routerAddress.seg[1] << "."
-		<< (int)Meassage->option.routerAddress.seg[0] << "."
-		<< endl;
-	cout << "租借时间为："
-		<< (int)Meassage->option.addressLeaseTime[0]<<":"
-		<< (int)Meassage->option.addressLeaseTime[1]<< ":"
-		<< (int)Meassage->option.addressLeaseTime[2]<< ":"
-		<< endl;
-	if (recvMessage.option.DHCPMeassageType == DHCP_ACK)
-		DHCPFinish = true;
-	switch (recvMessage.option.DHCPMeassageType)
-	{
-	case DHCP_OFFER:
-		meassageType = DHCP_REQUEST;
-		break;
-	case DHCP_ACK:
-		meassageType = DHCP_REQUEST;
-	default:
-		break;
-	}
-
-	return 0;
+	messageData = *Data;
 }
 
-bool DHCPPackageClient::getState()
+void RIPPacket::setMessage(MessageData *Data)
 {
-	return DHCPFinish;
+	ripMessage.header = header;
+	memcpy(ripMessage.messageData, Data, sizeof(ripMessage.messageData));
+}
+
+void RIPPacket::getData(MessageData *Data)
+{
+	*Data = messageData;
+}
+
+void RIPPacket::getMessage(RIPMessage *RipMessage)
+{
+	*RipMessage = ripMessage;
 }

@@ -147,12 +147,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="RIP.cpp" />
+    <ClCompile Include="RIPPackage.cpp" />
     <ClCompile Include="SocketRIP.cpp" />
     <ClCompile Include="sokecBasis.cpp" />
     <ClCompile Include="TimeCounter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RIPDataStruct.h" />
+    <ClInclude Include="RIPPackage.h" />
     <ClInclude Include="Router.h" />
     <ClInclude Include="SocketBasic.h" />
     <ClInclude Include="SocketRIP.h" />
