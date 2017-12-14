@@ -14,13 +14,15 @@ public:
 	void setMessage(MessageData *Data);               //设定报文
 	void getData(MessageData *Data);                  //获取数据
 	void getMessage(RIPMessage *RipMessage);          //获取报文
+	void setIPTable(Address *IPTable);
 
-
-private:
+protected:
 	
 	RIPHeader header;
-	MessageData messageData;
+	MessageData messageData[10];
+private:
 	RIPMessage ripMessage;
+	Address ipTable[10];
 };
 
 

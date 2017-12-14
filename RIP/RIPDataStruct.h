@@ -15,8 +15,15 @@ union Address
 	unsigned char seg[4]; //IP地址共4字节，或者看成无符号字符数组所指4部分
 	unsigned int address; //或者看成一个整体
 
+
 };
 
+struct DestinationRouter
+{
+	 char destIP[10];
+	int port;
+
+};
 
 //基本数据结构
 //DHCP报文类型标识
@@ -33,6 +40,10 @@ struct NetWork
 	uint8_t mask;
 };
 
+//struct BasicData
+//{
+//
+//};
 //交互信息，接收和要发送的数据
 struct MessageData
 {
@@ -50,19 +61,18 @@ struct RouterTable
 
 
 
-
-
 //RIP报文报文基本首部
  struct RIPHeader
 {
 	uint8_t command;      // message op code, message type
 	uint8_t version;   // versin 0f RIP
+	Address fromIP;
  };
 
 //DHCP报文选项
  struct RIPMessage
 {
-
+//	uint8_t series;    // series of protocol
 	RIPHeader header;
 	MessageData messageData[10];
 

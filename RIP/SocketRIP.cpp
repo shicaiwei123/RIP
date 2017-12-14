@@ -51,9 +51,14 @@ int SocketClient::recvSocket(char *RecvData, int Length)
 			{
 				int isequal = strcmp(RecvData, "ACK");  //如果收到ACK，那就改变变量
 				if (isequal == 0)
+				{
 					isACK = true;
+					continue;                           //收到ACK，继续监听
+				}
+
 				else                                     //如果不是，那就回复ACK
 				{
+
 					send(s, "ACK", 3, 0);
 				}
 
@@ -84,16 +89,22 @@ int SocketClient::recvSocket(char *RecvData, int Length, const char *FromIp, int
 			{
 				int isequal = strcmp(RecvData, "ACK");  //如果收到ACK，那就改变变量
 				if (isequal == 0)
+				{
 					isACK = true;
+					continue;                           //收到ACK，继续监听
+				}
+				
 				else                                     //如果不是，那就回复ACK
 				{
 					sendto(s, "ACK", 3, 0, (sockaddr *)&serAddr, len);
+					return 0;
 				}
 
 			}
+			return 0;
 
 		}
-		return 0;
+	
 	}
 	return 0;
 

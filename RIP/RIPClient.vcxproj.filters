@@ -30,6 +30,12 @@
     <ClCompile Include="RIPPackage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="NetWorking.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Router.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SocketBasic.h">
@@ -41,13 +47,16 @@
     <ClInclude Include="Router.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="TimeCounter.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="SocketRIP.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="TimeCounter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="RIPPackage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetWorking.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
