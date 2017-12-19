@@ -24,9 +24,6 @@
     <ClCompile Include="SocketRIP.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TimeCounter.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="RIPPackage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -50,14 +47,14 @@
     <ClInclude Include="SocketRIP.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="TimeCounter.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="RIPPackage.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="NetWorking.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

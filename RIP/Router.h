@@ -3,7 +3,7 @@
 #include "RIPPackage.h"
 #include "NetWorking.h"
 #include "SocketRIP.h"
-class  Router:public RIPPacket,public SocketClient,public NetWorking
+class  Router:public RIPPacket,public SocketRIP,public NetWorking
 {
 public:
 	Router();

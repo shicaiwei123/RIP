@@ -5,10 +5,10 @@
 #include "SocketBasic.h"
 #include"TimeCounter.h"
 #include "RIPDataStruct.h"
-class SocketClient :public socketBasic
+class SocketRIP :public socketBasic
 {
 public:
-	SocketClient();
+	SocketRIP();
 	int begin(bool StopWait);  	//初始化WSA
 	int socketConnect(const char *ip, int port);//绑定套接字要访问的服务器参数
 	int recvSocket(char *RecvData, int Length);//接收信息

@@ -1,14 +1,14 @@
 #include "SocketRIP.h"
 
-SocketClient::SocketClient()
+SocketRIP::SocketRIP()
 {
 
 }
 
-bool SocketClient::isACK = false;
-bool SocketClient::stopWait = false;
+bool SocketRIP::isACK = false;
+bool SocketRIP::stopWait = false;
 
-int SocketClient::begin(bool StopWait)
+int SocketRIP::begin(bool StopWait)
 {
 	stopWait = StopWait;
 	clock.begin(0,0,2);
@@ -20,7 +20,7 @@ int SocketClient::begin(bool StopWait)
 	}
 	return 0;
 }
-int SocketClient::socketConnect(const char *ip, int port)
+int SocketRIP::socketConnect(const char *ip, int port)
 {
 	int err;
 	sockaddr_in serAddr;
@@ -37,7 +37,7 @@ int SocketClient::socketConnect(const char *ip, int port)
 	return 0;
 }
 
-int SocketClient::recvSocket(char *RecvData, int Length)
+int SocketRIP::recvSocket(char *RecvData, int Length)
 {
 	int ret;
 	memset(RecvData, 0, Length);     //清空接收缓存
@@ -69,7 +69,7 @@ int SocketClient::recvSocket(char *RecvData, int Length)
 
 }
 
-int SocketClient::recvSocket(char *RecvData, int Length, const char *FromIp, int Port)
+int SocketRIP::recvSocket(char *RecvData, int Length, const char *FromIp, int Port)
 {
 	int ret;
 	memset(RecvData, 0, Length);     //清空接收缓存
@@ -110,7 +110,7 @@ int SocketClient::recvSocket(char *RecvData, int Length, const char *FromIp, int
 
 }
 
-int SocketClient::recvMessage(RIPMessage *ripMessage)
+int SocketRIP::recvMessage(RIPMessage *ripMessage)
 {
 	char recvData[4096];
 	recvSocket(recvData, 4096);
@@ -118,7 +118,7 @@ int SocketClient::recvMessage(RIPMessage *ripMessage)
 	return 0;
 }
 
-int SocketClient::recvMessage(RIPMessage *ripMessage, const char *FromIp, int Port)
+int SocketRIP::recvMessage(RIPMessage *ripMessage, const char *FromIp, int Port)
 {
 	char recvData[4096];
 	recvSocket(recvData, 4096, FromIp, Port);
@@ -127,7 +127,7 @@ int SocketClient::recvMessage(RIPMessage *ripMessage, const char *FromIp, int Po
 }
 
 
-void SocketClient::sendSocket(char *SendData, int Length)
+void SocketRIP::sendSocket(char *SendData, int Length)
 {
 	int err;
 	bool endFlag = false;
@@ -165,7 +165,7 @@ void SocketClient::sendSocket(char *SendData, int Length)
 
 }
 
-void SocketClient::sendSocket(char* SendData, int Length, const char *ToIp, int Port)
+void SocketRIP::sendSocket(char* SendData, int Length, const char *ToIp, int Port)
 {
 	sockaddr_in serAddr;
 	serAddr.sin_family = AF_INET;
@@ -207,21 +207,21 @@ void SocketClient::sendSocket(char* SendData, int Length, const char *ToIp, int 
 
 }
 
-void SocketClient::sendMessage(RIPMessage *ripMessage)
+void SocketRIP::sendMessage(RIPMessage *ripMessage)
 {
 	char sendData[1024];
 	memcpy(sendData, ripMessage, sizeof(RIPMessage));
 	sendSocket( sendData, 1024);
 }
 
-void SocketClient::sendMessage(RIPMessage *ripMessage, const char *ToIp, int Port)
+void SocketRIP::sendMessage(RIPMessage *ripMessage, const char *ToIp, int Port)
 {
 	char sendData[1024];
 	memcpy(sendData, ripMessage, sizeof(RIPMessage));
 	sendSocket(sendData, 1024, ToIp, Port);
 }
 
-void SocketClient::setSocket(SOCKET S)
+void SocketRIP::setSocket(SOCKET S)
 {
 	s = S;
 }

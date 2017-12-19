@@ -130,7 +130,7 @@ int main(int argc, char* argv[])
 	}
 
 	bool stopWait = false;
-	SocketClient socketClinet;                     //例化连接建立维护类
+	SocketRIP socketClinet;                     //例化连接建立维护类
 	socketClinet.begin(stopWait);
 	socketClinet.socketCreate(UDP);
 	socketClinet.bindSocket((char *)myIP, 8888);

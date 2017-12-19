@@ -47,7 +47,7 @@ void Router::initRouter()
 int Router::recvMessage()
 {
 	
-	SocketClient::recvMessage(&messageRecv);
+	SocketRIP::recvMessage(&messageRecv);
 	memcpy(recvRouter, messageRecv.messageData,sizeof(recvRouter));
 	update();
 	return 0;
@@ -56,7 +56,7 @@ int Router::recvMessage()
 int Router::recvMessage(const char *FromIp, int Port)
 {
 	isFinish = false;
-	SocketClient::recvMessage(&messageRecv, FromIp, Port);
+	SocketRIP::recvMessage(&messageRecv, FromIp, Port);
 	memcpy(recvRouter, messageRecv.messageData, sizeof(recvRouter));
 	update();
 	return 0;
@@ -68,7 +68,7 @@ int Router::update()
 	bool isequal = false;
 	while (1)
 	{
-		if (recvRouter[i].cost==0)  //数据处理完成
+		if (recvRouter[i].net.ip.address==0)  //数据处理完成
 		{
 			break;
 		}
@@ -76,7 +76,8 @@ int Router::update()
 		for (int j = 0; j < 10;j++)
 		{
 			if ((recvRouter[i].net.ip.address==localTable[j].messageData.net.ip.address)&&
-				(recvRouter[i].net.mask == localTable[j].messageData.net.mask))  //IP子网相同
+				(recvRouter[i].net.mask == localTable[j].messageData.net.mask)
+			) //IP子网相同
 			{
 				if (localTable[j].messageData.cost>recvRouter[i].cost+1)      //如果原路由表项开销大则更新
 				{
@@ -98,7 +99,13 @@ int Router::update()
 			localTable[tableLen - 1].nextHop = messageRecv.header.fromIP;
 			tableLen++;
 		}
+		isequal = false;
+
 		i++;
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		memcpy(&sendRouter[i], &localTable[i].messageData, sizeof(MessageData));
 	}
 	return 0;
 }
@@ -112,7 +119,7 @@ int Router::sendMessage()
 	setData(sendRouter);
 	getMessage(&messageSend);
 	//发送
-	SocketClient::sendMessage(&messageSend);
+	SocketRIP::sendMessage(&messageSend);
 	return 0;
 
 }
@@ -125,7 +132,7 @@ int Router::sendMessage(const char *ToIp, int Port)
 	setData(sendRouter);
 	getMessage(&messageSend);
 	//发送
-	SocketClient::sendMessage(&messageSend,ToIp,Port);
+	SocketRIP::sendMessage(&messageSend,ToIp,Port);
 	return 0;
 }
 
